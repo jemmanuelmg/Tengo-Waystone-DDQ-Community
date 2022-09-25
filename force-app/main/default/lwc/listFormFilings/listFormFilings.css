@@ -1,0 +1,33 @@
+.container{
+    background-color: white;
+    padding: 30px;
+    overflow: auto;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.icon-container{
+    margin-right: 10px;
+}
+
+.instructions{
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+th, td{
+    font-size: 14px !important;
+}
+
+.slds-card{
+    -webkit-box-shadow: 0px 2px 5px 0px rgba(221,219,218,1) !important;
+    -moz-box-shadow: 0px 2px 5px 0px rgba(221,219,218,1) !important;
+    box-shadow: 0px 2px 5px 0px rgba(221,219,218,1) !important;
+}
+
+.actions-cell{
+    width: 140px !important;
+}

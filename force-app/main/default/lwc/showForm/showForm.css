@@ -1,0 +1,177 @@
+.container{
+    background-color: white;
+    padding-top: 20px;
+    padding-right: 30px;
+    padding-left: 30px;
+    padding-bottom: 30px;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.icon-container{
+    margin-right: 10px;
+}
+
+.section-name{
+    background-color: #F3F2F2;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.question-container{
+    padding-left: 15px;
+}
+
+.question-description{
+    font-size: 16px;
+    text-align: justify;
+    max-width: 60vw;
+}
+
+.combobox-question{
+    max-width: 58.4vw !important;
+}
+
+.question-number{
+    margin-right: 8px;
+}
+
+.input-container{
+    margin-left: 25px !important;
+    margin-bottom: 15px;
+}
+
+.comments-textarea{
+    margin-top: 8px;
+}
+
+.textarea-container{
+    max-width: 58.4vw;
+}
+
+.separator{
+    border-top: 2px solid black;
+    margin-bottom: 15px;
+}
+
+.confirmation-container{
+    max-width: 60vw;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.save-buttons-container{
+    text-align: center;
+}
+
+.consent-checkbox{
+    margin-right: 8px;
+}
+
+.consent-text{
+    font-size: 14px;
+    margin-top: 1;
+    text-align: justify;
+    margin-left: 5px;
+}
+
+.slds-form-element__legend{
+    font-size: 20rem !important;
+}
+
+.confirm-title{
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.invalid-url-message{
+    text-align: center;
+}
+
+.today-date{
+    font-size: 14px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+span.slds-form-element__label{
+    color: black !important;
+    font-size: 14px !important;
+}
+
+.im-data-section{
+    padding: 18px;
+    font-size: 16px;
+}
+
+.heading{
+    padding: 13px;
+}
+
+.fund-name-list{
+    margin-left: 10px;
+}
+
+.warning-container{
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.warning{
+    margin-top:5px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #4BCA81;
+}
+
+.confirmation-label{
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.table-label{
+    color: #4E6282;
+}
+
+.table-value{
+    padding-left: 10px
+}
+
+.table-td-narrow{
+    max-width: 70px;
+}
+
+.relative{
+    position: relative;
+}
+
+.upper-center{
+    position: absolute;
+    top: 2px;
+}
+
+.secondary-questions-container{
+    margin-left: 5vw;
+    background-color: #F3F2F2;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 15px;
+    padding-left: 0px;
+    border-radius: 7px;
+    width: 62vw;
+}
+
+.hidden{
+    display: none;
+}
+
+.show{
+    display: inline-block;
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>49.0</apiVersion>
+    <isExposed>true</isExposed>
+    <targets>
+        <target>lightning__AppPage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property label="Status" name="status" type="String" datasource="All,Draft,Complete" default="All"/>
+            <property label="Year" name="year" type="String" datasource="All,Current Year" default="All"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

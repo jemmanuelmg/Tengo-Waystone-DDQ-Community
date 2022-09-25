@@ -1,0 +1,61 @@
+<!--
+  @description       : 
+  @author            : emmanuel.martinez@tengo.co
+  @group             : 
+  @last modified on  : 12-16-2020
+  @last modified by  : emmanuel.martinez@tengo.co
+  Modifications Log 
+  Ver   Date         Author                       Modification
+  1.0   10-27-2020   emmanuel.martinez@tengo.co   Initial Version
+-->
+<template>
+    <div class="container slds-is-relative">
+  
+      <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+      </template>
+  
+      <template if:true={thereAreRecords}>
+        <table class="slds-table slds-table_bordered">
+          <thead>
+            <tr>
+              <th>Action Item</th>
+              <th>Action Subject</th>
+              <th>Due Date</th>
+              <th>Days Remaining</th>
+              <th>Last Remainder Sent On</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template for:each={actionItems} for:item="action">
+              <tr key={action.Id}>
+                <td>
+                  <a class="form-filing-link" target="_blank" href={action.Link}>
+                    {action.Name}
+                  </a>
+                </td>
+                <td>{action.ActionSubject}</td>
+                <td>{action.DueDate}</td>
+                <td>{action.DaysRemaining}</td>
+                <td>{action.LastReminderSentOn}</td>
+                <td>{action.Status}</td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </template>
+  
+      <template if:false={thereAreRecords}>
+        <div class="no-records-message">
+          <br>
+          <div class="slds-text-heading_medium">No items to display.</div>
+          <br>
+          <div class="slds-text-heading_small">At the moment there are no Action Items related with this Engagement.</div>
+          <br>
+        </div>
+      </template>
+      
+    </div>
+  </template>
+  

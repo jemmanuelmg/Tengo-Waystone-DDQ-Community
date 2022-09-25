@@ -1,0 +1,542 @@
+<!--
+  @description       : 
+  @author            : emmanuel.martinez@tengo.co
+  @group             : 
+  @last modified on  : 12-22-2020
+  @last modified by  : emmanuel.martinez@tengo.co
+  Modifications Log 
+  Ver   Date         Author                       Modification
+  1.0   11-30-2020   emmanuel.martinez@tengo.co   Initial Version
+-->
+<template>
+
+    <div class="container">
+    
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+
+        <template if:true={urlHasParameters}>            
+
+            <div class="slds-text-heading_medium heading"><b>{formName}</b></div>
+
+            <br>
+
+            <div class="slds-path">
+                <div class="slds-grid slds-path__track">
+                  <div class="slds-grid slds-path__scroller-container">
+                    <div class="slds-path__scroller">
+                      <div class="slds-path__scroller_inner">
+                        <ul class="slds-path__nav" role="listbox" aria-orientation="horizontal">
+                            <li class="slds-path__item slds-is-current slds-is-active" role="presentation">
+                                <a aria-selected="true" class="slds-path__link" href="javascript:void(0);" id="path-1" role="option" tabindex="0">
+                                    <span class="slds-path__stage">
+                                        <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                        </svg>
+                                        <span class="slds-assistive-text">Current Stage:</span>
+                                    </span>
+                                    <span class="slds-path__title">Draft</span>
+                                </a>
+                            </li>
+                            <template if:true={ifFormComplete}>
+                                <li class="slds-path__item slds-is-complete" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-6" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <lightning-icon icon-name="utility:check" title="Complete" variant="inverse" size="x-small"></lightning-icon>
+                                            <span class="slds-assistive-text">Stage Complete</span>
+                                        </span>
+                                        <span class="slds-path__title">Complete</span>
+                                    </a>
+                                </li>
+                            </template>
+                            <template if:false={ifFormComplete}>
+                                <li class="slds-path__item slds-is-incomplete" role="presentation">
+                                    <a aria-selected="false" class="slds-path__link" href="javascript:void(0);" id="path-2" role="option" tabindex="-1">
+                                        <span class="slds-path__stage">
+                                            <svg class="slds-icon slds-icon_x-small" aria-hidden="true">
+                                                <use xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#check"></use>
+                                            </svg>
+                                        </span>
+                                        <span class="slds-path__title">Complete</span>
+                                    </a>
+                                </li>
+                            </template>  
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <br>
+
+            <template if:true={ifFormComplete}>
+                <div class="warning-container">
+                    <span class="warning">
+                        Please be aware, this form has been submitted so can no longer be edited
+                    </span>
+                </div>
+            </template>
+
+            <br>
+
+            <div class="im-data-section">
+                <table>
+                    <tr>
+                        <td class="table-td-narrow">
+                            <span class="table-label">
+                                <b>Investment Manager Name:</b>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="table-value">
+                                {accountName}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td-narrow relative">
+                            <span class="table-label upper-center">
+                                <b>Fund Name(s):</b>
+                            </span>
+                        </td>
+                        <td>
+                            <template for:each={fundNamesList} for:item='name'>
+                                <p key={name} class="table-value">
+                                    {name}
+                                </p>
+                            </template>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="table-td-narrow">
+                            <span class="table-label">
+                                <b>Reporting Year ("the Period"):</b>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="table-value">
+                                {reportingYear}
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="questionnaire-container">
+
+                <template for:each={formSectionAndFields} for:item='section'>
+                    <div class="section-container" key={section.Id}>
+                        <div class="section-name">{section.Name}</div>
+                        <br>
+                        <br>
+    
+                        <template for:each={section.Form_Fields1__r} for:item='formField'>
+                            <template if:true={formField.isPrimaryQuestion}>
+
+                                <div class="question-container" key={formField.Id}>
+
+                                    <div class='question-description flex-container'>
+                                        <div class="question-number"><b>{formField.Position_Order__c}.</b></div> 
+                                        <div class="question-text">{formField.Description__c}</div>
+                                    </div>
+        
+                                    <div class="input-container">
+                                        <template if:true={formField.IsMandatory}>
+
+                                            <template if:true={formField.isCountryList}>
+                                                <lightning-combobox
+                                                    required
+                                                    label="Mandatory"
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a country"
+                                                    options={countryListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                            <template if:true={formField.isLargeString}>
+                                                <lightning-textarea
+                                                    required
+                                                    label="Mandatory" 
+                                                    placeholder="Write your answer here" 
+                                                    maxlength="32767"                                                    
+                                                    data-inputid={formField.Id}>
+                                                </lightning-textarea>
+                                            </template>
+
+                                            <template if:true={formField.isFrequencyList}>
+                                                <lightning-combobox
+                                                    required
+                                                    label="Mandatory"
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a frequency"
+                                                    options={frequencyListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                            <template if:true={formField.isYesNo}>
+                                                <lightning-radio-group
+                                                    required
+                                                    label="Mandatory" 
+                                                    name={formField.Id}
+                                                    options={yesNoOptions}
+                                                    type="radio"
+                                                    onchange={handleChangeYesNo}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-radio-group>
+                                            </template>
+
+                                            <template if:true={formField.isYesNoNA}>
+                                                <lightning-radio-group
+                                                    required
+                                                    label="Mandatory" 
+                                                    name={formField.Id}
+                                                    options={yesNoNAOptions}
+                                                    type="radio"
+                                                    onchange={handleChangeYesNo}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-radio-group>
+                                            </template>
+
+                                            <template if:true={formField.isPercentage}>
+                                                <lightning-input 
+                                                    required
+                                                    label="Mandatory"
+                                                    type="number" 
+                                                    name={formField.Id} 
+                                                    formatter="percent-fixed"
+                                                    step="0.01"
+                                                    placeholder="Enter a number"
+                                                    data-inputid={formField.Id}>
+                                                </lightning-input>
+                                            </template>
+
+                                            <template if:true={formField.isStrategyList}>
+                                                <lightning-combobox
+                                                    required
+                                                    label="Mandatory"
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a strategy"
+                                                    options={strategyListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                        </template>
+
+                                        <template if:false={formField.IsMandatory}>
+
+                                            <template if:true={formField.isCountryList}>
+                                                <lightning-combobox
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a country"
+                                                    options={countryListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                            <template if:true={formField.isLargeString}>
+                                                <lightning-textarea  
+                                                    placeholder="Write your answer here" 
+                                                    maxlength="32767"
+                                                    data-inputid={formField.Id}>
+                                                </lightning-textarea>
+                                            </template>
+
+                                            <template if:true={formField.isFrequencyList}>
+                                                <lightning-combobox
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a frequency"
+                                                    options={frequencyListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                            <template if:true={formField.isYesNo}>
+                                                <lightning-radio-group
+                                                    name={formField.Id}
+                                                    options={yesNoOptions}
+                                                    type="radio"
+                                                    onchange={handleChangeYesNo}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-radio-group>                                                
+                                            </template>
+
+                                            <template if:true={formField.isYesNoNA}>
+                                                <lightning-radio-group
+                                                    name={formField.Id}
+                                                    options={yesNoNAOptions}
+                                                    type="radio"
+                                                    onchange={handleChangeYesNo}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-radio-group>                                                
+                                            </template>
+
+                                            <template if:true={formField.isPercentage}>
+                                                <lightning-input 
+                                                    type="number" 
+                                                    name={formField.Id}
+                                                    label="Enter a number" 
+                                                    formatter="percent-fixed"
+                                                    step="0.01"
+                                                    placeholder="Enter a number"
+                                                    data-inputid={formField.Id}>
+                                                </lightning-input>
+                                            </template>
+
+                                            <template if:true={formField.isStrategyList}>
+                                                <lightning-combobox
+                                                    class="combobox-question"
+                                                    name={formField.Id}
+                                                    placeholder="Select a strategy"
+                                                    options={strategyListOptions}
+                                                    onchange={handleChange}
+                                                    data-inputid={formField.Id}>
+                                                </lightning-combobox>
+                                            </template>
+
+                                        </template>
+
+                                        <template if:true={formField.AddAdditionalComments__c}>
+                                            <div class="textarea-container">
+                                                <lightning-textarea data-commentfor={formField.Id} placeholder="Add a comment if necessary" maxlength="32767" class="comments-textarea"></lightning-textarea>
+                                            </div>
+                                        </template>
+
+                                    </div>
+
+                                    <template if:true={formField.hasSecondaryQuestions}>
+                                        <div class="secondary-questions-container hidden" data-activatedby={formField.Id}>
+
+                                            <template for:each={formField.secondaryQuestions} for:item='secondFormField'>
+                                                <div class="question-container" key={secondFormField.Id}>
+
+                                                    <div class='question-description flex-container'>
+                                                        <div class="question-number"><b>{secondFormField.Position_Order__c}.</b></div> 
+                                                        <div class="question-text">{secondFormField.Description__c}</div>
+                                                    </div>
+                        
+                                                    <div class="input-container">
+
+                                                        <template if:true={secondFormField.isCountryList}>
+                                                            <lightning-combobox
+                                                                label="Mandatory"
+                                                                class="combobox-question"
+                                                                name={secondFormField.Id}
+                                                                placeholder="Select a country"
+                                                                options={countryListOptions}
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-combobox>
+                                                        </template>
+            
+                                                        <template if:true={secondFormField.isLargeString}>
+                                                            <lightning-textarea
+                                                                label="Mandatory"
+                                                                placeholder="Write your answer here"
+                                                                onchange={handleChangeRequired} 
+                                                                maxlength="32767"
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-textarea>
+                                                        </template>
+            
+                                                        <template if:true={secondFormField.isFrequencyList}>
+                                                            <lightning-combobox
+                                                                label="Mandatory"
+                                                                class="combobox-question"
+                                                                name={secondFormField.Id}
+                                                                placeholder="Select a frequency"
+                                                                options={frequencyListOptions}
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-combobox>
+                                                        </template>
+            
+                                                        <template if:true={secondFormField.isYesNo}>
+                                                            <lightning-radio-group
+                                                                label="Mandatory"
+                                                                name={secondFormField.Id}
+                                                                options={yesNoOptions}
+                                                                type="radio"
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-radio-group>
+                                                        </template>
+
+                                                        <template if:true={secondFormField.isYesNoNA}>
+                                                            <lightning-radio-group
+                                                                label="Mandatory"
+                                                                name={secondFormField.Id}
+                                                                options={yesNoNAOptions}
+                                                                type="radio"
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-radio-group>
+                                                        </template>
+            
+                                                        <template if:true={secondFormField.isPercentage}>
+                                                            <lightning-input
+                                                                label="Mandatory" 
+                                                                type="number" 
+                                                                name={secondFormField.Id} 
+                                                                formatter="percent-fixed"
+                                                                step="0.01"
+                                                                placeholder="Enter a number" 
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-input>
+                                                        </template>
+            
+                                                        <template if:true={secondFormField.isStrategyList}>
+                                                            <lightning-combobox
+                                                                label="Mandatory"
+                                                                class="combobox-question"
+                                                                name={secondFormField.Id}
+                                                                placeholder="Select a strategy"
+                                                                options={strategyListOptions}
+                                                                onchange={handleChangeRequired}
+                                                                data-inputid={secondFormField.Id}
+                                                                data-parent={formField.Id}>
+                                                            </lightning-combobox>
+                                                        </template>
+
+                                                        <template if:true={secondFormField.AddAdditionalComments__c}>
+                                                            <div class="textarea-container">
+                                                                <lightning-textarea data-commentfor={secondFormField.Id} placeholder="Add a comment if necessary" maxlength="32767" class="comments-textarea"></lightning-textarea>
+                                                            </div>
+                                                        </template>
+
+                                                    </div>
+
+                                                    <template if:true={secondFormField.hasSecondaryQuestions}>
+                                                        <div class="hidden" data-activatedby={secondFormField.Id}>
+
+                                                            <template for:each={secondFormField.secondaryQuestions} for:item='thirdFormField'>
+                                                                <div class="question-container" key={thirdFormField.Id}>
+
+                                                                    <div class='question-description flex-container'>
+                                                                        <div class="question-number"><b>{thirdFormField.Position_Order__c}.</b></div> 
+                                                                        <div class="question-text">{thirdFormField.Description__c}</div>
+                                                                    </div>
+
+                                                                    <div class="input-container">
+                                                                        <template if:true={thirdFormField.isCountryList}>
+                                                                            <lightning-combobox
+                                                                                label="Mandatory"
+                                                                                class="combobox-question"
+                                                                                name={thirdFormField.Id}
+                                                                                placeholder="Select a country"
+                                                                                options={countryListOptions}
+                                                                                onchange={handleChangeRequired}
+                                                                                data-inputid={thirdFormField.Id}
+                                                                                data-parent={secondFormField.Id}>
+                                                                            </lightning-combobox>
+                                                                        </template>
+                                                                    </div>
+
+                                                                </div>
+                                                            </template>
+
+                                                        </div>
+                                                    </template>
+
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                    
+                                </div>
+
+                            </template>
+                        </template>
+                    </div>
+                </template>
+    
+                <br> 
+                <br> 
+
+                <div class="confirmation-section slds-box">
+                    <b><div class="confirmation-label">Confirmation Statement</div></b>
+                    <lightning-input 
+                        data-name="confirmation" 
+                        type="checkbox" 
+                        label="I confirm that I am not aware of any other issues regarding the company's 
+                        ability to perform the delegated contractual functions which require 
+                        escalation at this point in time in addition to the above criteria. 
+                        I also confirm I have the authority to represent my company on these matters 
+                        and I include my role in the signature block below." 
+                        name="input-confirm" 
+                        required>
+                    </lightning-input>
+                </div>
+    
+                <br>
+                <br>
+                <br>
+                
+                <div class="save-buttons-container">
+                    <lightning-button
+                        class="slds-m-top_small"
+                        variant="brand"
+                        type="submit"
+                        name="update"
+                        label="Save as Draft"
+                        onclick={saveQuestionnairePartially}>
+                    </lightning-button>
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    &nbsp;
+                    <lightning-button
+                        class="slds-m-top_small"
+                        variant="success"
+                        type="submit"
+                        name="update"
+                        label="Submit"
+                        onclick={saveQuestionnaireTotally}>
+                    </lightning-button>
+                </div>
+                <br>
+                <br>
+            </div>
+        </template>
+
+        <template if:false={urlHasParameters}>
+
+            <div class="invalid-url-message">
+                <lightning-icon icon-name="utility:deprecate" alternative-text="Error loading form" size="large"></lightning-icon>
+                <br>
+                <div class="slds-text-heading_large">There was a problem loading the form.</div>
+                <br>
+                <div class="slds-text-heading_small">Please go back to the table of available forms and select again the desired one to view.</div>
+                <br>
+                <br>
+            </div>
+
+        </template>
+    </div>
+
+</template>
